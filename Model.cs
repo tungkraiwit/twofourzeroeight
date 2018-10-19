@@ -10,6 +10,8 @@ namespace twozerofoureight
     public class Model
     {
         protected ArrayList oList;
+        public bool isEnd = false;
+        public int isFull = 0;
 
         public Model()
         {

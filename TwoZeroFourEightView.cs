@@ -14,6 +14,7 @@ namespace twozerofoureight
     {
         Model model;
         Controller controller;
+        int score;
        
         public TwoZeroFourEightView()
         {
@@ -23,11 +24,16 @@ namespace twozerofoureight
             controller = new TwoZeroFourEightController();
             controller.AddModel(model);
             controller.ActionPerformed(TwoZeroFourEightController.LEFT);
+            KeyDown += new KeyEventHandler(KeyDownHandler);
         }
 
         public void Notify(Model m)
         {
             UpdateBoard(((TwoZeroFourEightModel) m).GetBoard());
+            if (m.isEnd)
+            {
+                MessageBox.Show("----- GAME OVER -----\n      you score is "+score);
+            }
         }
 
         private void UpdateTile(Label l, int i)
@@ -41,22 +47,44 @@ namespace twozerofoureight
             switch (i)
             {
                 case 0:
-                    l.BackColor = Color.Gray;
+                    l.BackColor = Color.Wheat;
                     break;
                 case 2:
-                    l.BackColor = Color.DarkGray;
+                    l.BackColor = Color.Yellow;
                     break;
                 case 4:
-                    l.BackColor = Color.Orange;
+                    l.BackColor = Color.DarkOrange;
                     break;
                 case 8:
+                    l.BackColor = Color.MidnightBlue;
+                    break;
+                case 16:
+                    l.BackColor = Color.LightBlue;
+                    break;
+                case 32:
                     l.BackColor = Color.Red;
                     break;
+                case 64:
+                    l.BackColor = Color.BlueViolet;
+                    break;
+                case 128:
+                    l.BackColor = Color.Cyan;
+                    break;
+                case 256:
+                    l.BackColor = Color.LightPink;
+                    break;
+                case 512:
+                    l.BackColor = Color.LightSeaGreen;
+                    break;
+                case 1024:
+                    l.BackColor = Color.LightSalmon;
+                    break;
                 default:
-                    l.BackColor = Color.Green;
+                    l.BackColor = Color.CornflowerBlue;
                     break;
             }
         }
+
         private void UpdateBoard(int[,] board)
         {
             UpdateTile(lbl00,board[0, 0]);
@@ -75,27 +103,37 @@ namespace twozerofoureight
             UpdateTile(lbl31,board[3, 1]);
             UpdateTile(lbl32,board[3, 2]);
             UpdateTile(lbl33,board[3, 3]);
+            score = 0 ;
+            lblscore.Text = "0";
+            for (int i = 0; i < 4; i++)
+            {
+                for (int j = 0; j < 4; j++)
+                {
+                    score += board[i, j];
+                }
+            }
+            lblscore.Text = score.ToString();
         }
 
-        private void btnLeft_Click(object sender, EventArgs e)
+        private void KeyDownHandler(object sender, KeyEventArgs e)
         {
-            controller.ActionPerformed(TwoZeroFourEightController.LEFT);
-        }
-
-        private void btnRight_Click(object sender, EventArgs e)
-        {
-            controller.ActionPerformed(TwoZeroFourEightController.RIGHT);
-        }
-
-        private void btnUp_Click(object sender, EventArgs e)
-        {
-            controller.ActionPerformed(TwoZeroFourEightController.UP);
-        }
-
-        private void btnDown_Click(object sender, EventArgs e)
-        {
-            controller.ActionPerformed(TwoZeroFourEightController.DOWN);
-        }
-
+            if (e.KeyCode == Keys.Left)
+            {
+                controller.ActionPerformed(TwoZeroFourEightController.LEFT);
+            }
+            else if (e.KeyCode == Keys.Up)
+            {
+                controller.ActionPerformed(TwoZeroFourEightController.UP);
+            }
+            else if (e.KeyCode == Keys.Right)
+            {
+                controller.ActionPerformed(TwoZeroFourEightController.RIGHT);
+            }
+            else if (e.KeyCode == Keys.Down)
+            {
+                controller.ActionPerformed(TwoZeroFourEightController.DOWN);
+            }
+        } 
+        
     }
 }
